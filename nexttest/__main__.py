@@ -1,6 +1,6 @@
 import argparse
 import os
-from typing import Optional
+from typing import Optional, Dict, List
 
 import pytest
 
@@ -20,7 +20,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--pr",
-    choices=[],
+    type=int,
     help="Only run tests for this pr",
 )
 parser.add_argument(
@@ -29,7 +29,7 @@ parser.add_argument(
     help="Discover and run tests in the given directory",
 )
 args = parser.parse_args()
-pr: Optional[str] = args.pr
+pr: Optional[int] = args.pr
 repo: Optional[str] = args.repo
 discover_dir: Optional[str] = args.discover
 
@@ -39,3 +39,30 @@ if (pr or repo) and discover_dir:
 elif discover_dir:
     pytest_args: str = f"{discover_dir}"
     pytest.main(pytest_args.split(" "))
+
+elif repo and not pr:
+    path = os.path.join(os.path.dirname(__file__), f"test_{repo}")
+    pytest_args: str = f"{path}"
+    pytest.main(pytest_args.split(" "))
+
+elif pr and not repo:
+    parser.error("--repo is required when using --pr")
+
+elif repo and pr:
+    # {Repo: {PR: [test_files]}}
+    repo_mappings: Dict[str, Dict[int, List[str]]] = {"nextcord": {}}
+    pr_mapping: Dict[int, List[str]] = repo_mappings[repo]
+    try:
+        pr_test_paths = pr_mapping[pr]
+    except KeyError:
+        parser.error(f"No pr for {repo} with number {pr}")
+
+    pytest_args: List[str] = []
+    for test_path in pr_test_paths:  # noqa # parser.error exists the program
+        path = os.path.join(os.path.dirname(__file__), f"test_{repo}", test_path)
+        pytest_args.append(path)
+
+    pytest.main(pytest_args)
+
+else:
+    parser.print_help()
