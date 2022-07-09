@@ -87,12 +87,9 @@ elif repo and pr:
     except KeyError:
         parser.error(f"No pr for {repo} with number {pr}")
 
-    if platform.system().lower() == "windows":
-        log.warning(
-            "Not attempting PR checkout, please ensure you have the correct files installed."
-        )
-    else:
-        subprocess.run([f"gh pr checkout {pr}"])
+    log.warning(
+        "Please make sure the correct branch is installed. Install branches with git+...@branch"
+    )
 
     pytest_args: List[str] = []
     for test_path in pr_test_paths:  # noqa # parser.error exists the program
