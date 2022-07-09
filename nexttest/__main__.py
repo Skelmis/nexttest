@@ -18,7 +18,10 @@ def dir_path(string):
         raise parser.error("--discover was not a directory")
 
 
-parser = argparse.ArgumentParser(description="Run your tests", prog="NextTest")
+parser = argparse.ArgumentParser(
+    description="Run your tests.\nExtra arguments will be passed directly to pytest",
+    prog="NextTest",
+)
 parser.add_argument(
     "--repo",
     choices=["nextcord", "disnake"],
@@ -34,10 +37,10 @@ parser.add_argument(
     type=dir_path,
     help="Discover and run tests in the given directory",
 )
-args = parser.parse_args()
+args, unknown = parser.parse_known_args()
 pr: Optional[int] = args.pr
-repo: Optional[Literal["nextcord", "disnake"]] = args.repo
 discover_dir: Optional[str] = args.discover
+repo: Optional[Literal["nextcord", "disnake"]] = args.repo
 
 
 def ensure_package(package: Literal["nextcord", "disnake"]):
@@ -59,14 +62,14 @@ if (pr or repo) and discover_dir:
     parser.error("Cannot use --discover with --pr or --repo")
 
 elif discover_dir:
-    pytest_args: str = f"{discover_dir}"
-    pytest.main(pytest_args.split(" "))
+    unknown.append(discover_dir)
+    pytest.main(unknown)
 
 elif repo and not pr:
     ensure_package(repo)
     path = os.path.join(os.path.dirname(__file__), f"test_{repo}")
-    pytest_args: str = f"{path}"
-    pytest.main(pytest_args.split(" "))
+    unknown.append(path)
+    pytest.main(unknown)
 
 elif pr and not repo:
     parser.error("--repo is required when using --pr")
@@ -98,6 +101,7 @@ elif repo and pr:
         )
         pytest_args.append(path)
 
+    pytest_args.extend(unknown)
     pytest.main(pytest_args)
 
 else:
