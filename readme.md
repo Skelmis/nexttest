@@ -23,6 +23,7 @@ provides both a way to test new code, and backwards compatibility in a simple, r
 - [ ] Run all tests for a given repo
   - `python -m nexttest -repo nextcord` -> Would execute all nextcord associated tests
 - [ ] Support for both `disnake` and `nextcord` bots
+- [ ] Ship tests with Pypi build. I'm lazy, and it saves git cloning for most of my use-cases.
 
 Note, tests will be written with `pytest`. `NextTest` simply provides the means
 to test discord bots within `pytest`.
