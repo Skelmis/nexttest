@@ -34,3 +34,10 @@ to test discord bots within `pytest`.
 
 This will support the things I need to be able to test for personal usage,
 which albeit is not exhaustive. Please open an issue or pr for support for things you want.
+
+---
+
+#### Note
+
+Make sure to have `disnake` or `nextcord` installed from Git to test prs. 
+You will also need the github command line tools if you wish to test prs.
