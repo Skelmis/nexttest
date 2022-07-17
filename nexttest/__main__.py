@@ -79,7 +79,7 @@ elif repo and pr:
     # {Repo: {PR: [test_files]}}
     # test_files exist in the repo folder
     repo_mappings: Dict[str, Dict[int, List[str]]] = {
-        "nextcord": {598: ["test_load_extensions"]}
+        "nextcord": {598: ["test_load_extensions"], 743: ["test_group_mixin_args"]}
     }
     pr_mapping: Dict[int, List[str]] = repo_mappings[repo]
     try:
