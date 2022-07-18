@@ -7,6 +7,7 @@ import pytest
 from nextcord.ext.commands import (
     Bot,
     BadArgument,
+    ExtensionFailed,
 )
 
 CogLike = str  # String format of cog
@@ -144,5 +145,20 @@ async def test_finder_ignore(bot: Bot):
 
     loaded_2 = bot.load_extensions_from_module("cog", ignore=["valid.py"])
     assert len(loaded_2) == 0
+
+    teardown_cogs()
+
+
+async def test_raise_on_error(bot: Bot):
+    build_cog_dir_with_cogs()
+
+    with pytest.raises(ExtensionFailed):
+        bot.load_extensions(["cog.invalid_init_args"], stop_at_error=True)
+
+    with pytest.raises(ExtensionFailed):
+        bot.load_extensions_from_module("cog", stop_at_error=True)
+
+    loaded = bot.load_extensions_from_module("cog")
+    assert len(loaded) == 1
 
     teardown_cogs()
