@@ -80,3 +80,21 @@ class MissingSelfArgs(commands.Cog):
 async def test_missing_self_with_args(bot: commands.Bot):
     with pytest.raises(ValueError):
         bot.add_cog(MissingSelfArgs())
+
+
+class CustomInteraction(nextcord.Interaction):
+    """For the power users"""
+
+    @property
+    def mock_custom_obj(self) -> bool:
+        return True
+
+
+class CustomInterCog(commands.Cog):
+    @nextcord.slash_command()
+    async def i_am_valid(self, interaction: CustomInteraction, user_input: str):
+        ...
+
+
+async def test_custom_inter(bot: commands.Bot):
+    bot.add_cog(CustomInterCog())
