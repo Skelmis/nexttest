@@ -69,3 +69,14 @@ class MissingInter(commands.Cog):
 async def test_missing_inter_with_args(bot: commands.Bot):
     with pytest.raises(ValueError):
         bot.add_cog(MissingInter())
+
+
+class MissingSelfArgs(commands.Cog):
+    @nextcord.slash_command()
+    async def invalid_inter(interaction: nextcord.Interaction, user_input: str):
+        ...
+
+
+async def test_missing_self_with_args(bot: commands.Bot):
+    with pytest.raises(ValueError):
+        bot.add_cog(MissingSelfArgs())
