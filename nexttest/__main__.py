@@ -83,6 +83,7 @@ elif repo and pr:
             598: ["test_load_extensions"],
             743: ["test_group_mixin_args"],
             706: ["test_remove_view"],
+            736: ["test_736"],
         }
     }
     pr_mapping: Dict[int, List[str]] = repo_mappings[repo]
@@ -96,7 +97,7 @@ elif repo and pr:
     )
 
     pytest_args: List[str] = []
-    for test_path in pr_test_paths:  # noqa # parser.error exists the program
+    for test_path in pr_test_paths:  # noqa # exists the program
         path = os.path.join(
             os.path.dirname(__file__), f"test_{repo}", f"{test_path}.py"
         )
