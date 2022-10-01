@@ -3,6 +3,8 @@ NextTest
 
 A simple solution to actually testing discord bots.
 
+This is built for testing NextCord pull requests. If you want an actual discord bot unit test framework, checkout [Causar](https://github.com/Skelmis/Causar)
+
 ---
 
 #### Motivation
