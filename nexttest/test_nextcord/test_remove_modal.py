@@ -45,3 +45,17 @@ async def test_with_user_id(bot: Bot):
 
     bot.remove_modal(modal_one)
     assert len(bot._connection._modal_store._modals) == 0
+
+
+async def test_misaligned_modals(bot: Bot):
+    modal_one = Modal(timeout=None, title="modal_one", custom_id="modal_one")
+    modal_one.add_item(TextInput("label", custom_id="modal_one_label"))
+    assert not bot._connection._modal_store._modals
+
+    bot.add_modal(modal_one, user_id=12345)
+    assert len(bot._connection._modal_store._modals) == 1
+
+    modal_two = Modal(timeout=None, title="modal_two", custom_id="modal_two")
+    modal_two.add_item(TextInput("label", custom_id="modal_two_label"))
+    bot.remove_modal(modal_two)
+    assert len(bot._connection._modal_store._modals) == 1
