@@ -26,6 +26,19 @@ async def test_add(bot: Bot):
     assert len(bot._connection._view_store._views) == 2
 
 
+async def test_simple_remove(bot: Bot):
+    """Tests view removal without a message id"""
+    view_one = View(timeout=None)
+    view_one.add_item(Button(label="test", custom_id="test"))
+    assert not bot._connection._view_store._views
+
+    bot.add_view(view_one)
+    assert len(bot._connection._view_store._views) == 1
+
+    bot.remove_view(view_one)
+    assert len(bot._connection._view_store._views) == 0
+
+
 async def test_remove(bot: Bot):
     """Tests view removal without a message id"""
     view_one = View(timeout=None)
