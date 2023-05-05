@@ -87,7 +87,10 @@ elif repo and pr:
             820: ["test_remove_view", "test_remove_modal"],
             812: ["test_812"],
             1044: ["test_1044"],
-        }
+        },
+        "disnake": {
+            1018: ["test_1018"],
+        },
     }
     pr_mapping: Dict[int, List[str]] = repo_mappings[repo]
     try:
